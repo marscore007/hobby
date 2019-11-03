@@ -46,20 +46,6 @@ Dialog::~Dialog()
 
 void Dialog::HandleLogin(QWebSocket *pClient, const QJsonObject& json_root)
 {
-	/**
-	* {
-	"base": {
-	"id": 0,
-	"type": 0,
-	"errorcode": 0
-	},
-	"state": 1,
-	"identify": "abc",
-	"account": "abc",
-	"username": "wxid_",
-	"nickname": "nickname"
-	}
-	*/
 	CMagicWidgetItem *item = nullptr;
 	for (int i = 0; i < ui->tableWidget->rowCount(); i++)
 	{
@@ -84,8 +70,8 @@ void Dialog::HandleLogin(QWebSocket *pClient, const QJsonObject& json_root)
 
 		QJsonObject command;
 		command.insert("base", base);
-		command.insert("account", "shieh_20181126");
-		command.insert("token", "446008c4694e26b803c63992584f1df9");
+		command.insert("account", "xxxx");
+		command.insert("token", "xxxxx");
 		
 		QJsonDocument document;
 		document.setObject(command);
@@ -100,6 +86,7 @@ void Dialog::HandleLogin(QWebSocket *pClient, const QJsonObject& json_root)
 	else if (iErrorCode == -301)
 	{
 		strTip = QString::fromStdWString(L"重定向");
+		//第一次登录都会有这个错误，只要重新登陆一次就可以
 	}
 	else
 	{
@@ -180,6 +167,8 @@ void Dialog::OnSendCommand()
 		{
 			return;
 		}
+
+		//通过websocket 发送消息
 		QJsonObject base;
 		base.insert("id", m_iTaskID++);
 		base.insert("type", MSG_TYPE_COMMAND);
@@ -197,6 +186,7 @@ void Dialog::OnSendCommand()
 	}
 }
 
+//客户端连接成功之后，保存客户端的连接
 void Dialog::onNewConnection()
 {
 	QWebSocket *pSocket = m_pWebSocketServer->nextPendingConnection();
@@ -207,6 +197,7 @@ void Dialog::onNewConnection()
 	m_clients[pSocket] = ClientInfo();
 }
 
+//接收到客户端发来的消息，是一个json 处理消息
 void Dialog::processTextMessage(QString message)
 {
 	ui->textBrowser->insertPlainText(message);
