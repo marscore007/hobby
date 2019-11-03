@@ -36,9 +36,9 @@ Q_SIGNALS:
 private slots:
 	void show_menu(const QPoint pos);
 	void OnSendCommand();
+	void on_pushButton_clicked(bool checked);
 
 private:
-	void HandleWakeup(QWebSocket *pClient, const QJsonObject& json_root);
 	void HandleLogin(QWebSocket *pClient, const QJsonObject& json_root);
 	void HandleInit(QWebSocket *pClient, const QJsonObject& json_root);
 	void HandleSync(QWebSocket *pClient, const QJsonObject& json_root);

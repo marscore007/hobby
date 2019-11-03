@@ -5,13 +5,21 @@
 #include "QtWebSockets/qwebsocket.h"
 #include "magicwidgetitem.h"
 #include "fillcommand.h"
+
+const int MSG_TYPE_LOGIN = 0;
+const int  MSG_TYPE_INIT = 1;
+const int MSG_TYPE_SYNC = 2;
+const int MSG_TYPE_RESULT = 3;
+const int MSG_TYPE_COMMAND = 4;
+const int MSG_TYPE_Auth = 5;
+
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
 	QStringList header;
-	header << QString::fromStdWString(L"标识符") << QString::fromStdWString(L"状态") << QString::fromStdWString(L"用户名") << QString::fromStdWString(L"昵称");
+	header << QString::fromStdWString(L"状态") << QString::fromStdWString(L"用户名") << QString::fromStdWString(L"昵称");
 	ui->tableWidget->setColumnCount(4);
 	ui->tableWidget->setHorizontalHeaderLabels(header);
 	ui->tableWidget->setColumnWidth(0, 90);  //0 设置列宽
@@ -36,41 +44,79 @@ Dialog::~Dialog()
     delete ui;
 }
 
-void Dialog::HandleWakeup(QWebSocket *pClient, const QJsonObject& json_root)
+void Dialog::HandleLogin(QWebSocket *pClient, const QJsonObject& json_root)
 {
 	/**
-	 * {
-	 "base": {
-	 "id": 0,
-	 "type": 0,
-	 "errorcode": 0
-	 },
-	 "state": 1,
-	 "identify": "abc",
-	 "account": "abc",
-	 "username": "wxid_",
-	 "nickname": "nickname"
-	 }
-	 */
-	CMagicWidgetItem *item = new CMagicWidgetItem(json_root["identify"].toString(),pClient);
-	int iRow = ui->tableWidget->rowCount();
-	ui->tableWidget->insertRow(iRow);
-	ui->tableWidget->setItem(iRow, 0, item);
-	if (json_root["state"].toInt() == 0)
+	* {
+	"base": {
+	"id": 0,
+	"type": 0,
+	"errorcode": 0
+	},
+	"state": 1,
+	"identify": "abc",
+	"account": "abc",
+	"username": "wxid_",
+	"nickname": "nickname"
+	}
+	*/
+	CMagicWidgetItem *item = nullptr;
+	for (int i = 0; i < ui->tableWidget->rowCount(); i++)
 	{
-		ui->tableWidget->setItem(iRow, 1, new QTableWidgetItem(json_root["在线"].toString()));
+		CMagicWidgetItem* pItem = (CMagicWidgetItem*)ui->tableWidget->item(i, 0);
+		if (pItem->m_pSocket == pClient)
+		{
+			item = pItem;
+			break;
+		}
+	}
+
+	int iErrorCode = json_root["base"].toObject()["errorcode"].toInt();
+	QString strTip;
+	if (iErrorCode == -1)
+	{
+		strTip = QString::fromStdWString(L"空闲");
+		//发送命令授权,只需要发送一次就可以
+		QJsonObject base;
+		base.insert("id", m_iTaskID++);
+		base.insert("type", MSG_TYPE_Auth);
+		base.insert("errorcode", 0);
+
+		QJsonObject command;
+		command.insert("base", base);
+		command.insert("account", "shieh_20181126");
+		command.insert("token", "446008c4694e26b803c63992584f1df9");
+		
+		QJsonDocument document;
+		document.setObject(command);
+		QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+
+		pClient->sendTextMessage(QString(byteArray));
+	}
+	else if (iErrorCode == 0)
+	{
+		strTip = QString::fromStdWString(L"在线");
+	}
+	else if (iErrorCode == -301)
+	{
+		strTip = QString::fromStdWString(L"重定向");
 	}
 	else
 	{
-		ui->tableWidget->setItem(iRow, 1, new QTableWidgetItem(json_root["离线"].toString()));
+		strTip = QString::fromStdWString(L"异常");
 	}
-	ui->tableWidget->setItem(iRow, 2, new QTableWidgetItem(json_root["account"].toString()));
-	ui->tableWidget->setItem(iRow, 3, new QTableWidgetItem(json_root["nickname"].toString()));
-}
-
-void Dialog::HandleLogin(QWebSocket *pClient, const QJsonObject& json_root)
-{
-
+	if (item != nullptr)
+	{
+		item->setText(strTip);
+	}
+	else
+	{
+		item = new CMagicWidgetItem(strTip, pClient);
+		int iRow = ui->tableWidget->rowCount();
+		ui->tableWidget->insertRow(iRow);
+		ui->tableWidget->setItem(iRow, 0, item);
+	}
+	
 }
 
 void Dialog::HandleInit(QWebSocket *pClient, const QJsonObject& json_root)
@@ -95,6 +141,15 @@ void Dialog::socketDisconnected()
 		auto it = m_clients.find(pClient);
 		if (it != m_clients.end())
 		{
+			for (int i = 0; i < ui->tableWidget->rowCount();i++)
+			{
+				CMagicWidgetItem* pItem = (CMagicWidgetItem*)ui->tableWidget->item(i, 0);
+				if (pItem->m_pSocket == pClient)
+				{
+					ui->tableWidget->removeRow(i);
+					break;
+				}
+			}
 			m_clients.erase(it);
 		}
 		pClient->deleteLater();
@@ -127,7 +182,7 @@ void Dialog::OnSendCommand()
 		}
 		QJsonObject base;
 		base.insert("id", m_iTaskID++);
-		base.insert("type", 5);
+		base.insert("type", MSG_TYPE_COMMAND);
 		base.insert("errorcode", 0);
 
 		QJsonObject command;
@@ -155,9 +210,10 @@ void Dialog::onNewConnection()
 void Dialog::processTextMessage(QString message)
 {
 	ui->textBrowser->insertPlainText(message);
+	ui->textBrowser->insertPlainText("\n");
 	QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
 	QJsonParseError jsonError;
-	QJsonDocument doucment = QJsonDocument::fromJson(message.toLocal8Bit(), &jsonError);
+	QJsonDocument doucment = QJsonDocument::fromJson(message.toUtf8(), &jsonError);
 	if (!doucment.isObject())
 	{
 		return;
@@ -166,27 +222,22 @@ void Dialog::processTextMessage(QString message)
 	QJsonObject base = root["base"].toObject();
 	switch (base["type"].toInt())
 	{
-	case 0:
-	{
-		HandleWakeup(pClient, root);
-	}
-	break;
-	case 1:
+	case MSG_TYPE_LOGIN:
 	{
 		HandleLogin(pClient, root);
 	}
 	break;
-	case 2:
+	case MSG_TYPE_INIT:
 	{
 		HandleInit(pClient, root);
 	}
 	break;
-	case 3:
+	case MSG_TYPE_SYNC:
 	{
 		HandleSync(pClient, root);
 	}
 	break;
-	case 4:
+	case MSG_TYPE_RESULT:
 	{
 		HandleResult(pClient, root);
 	}
@@ -203,4 +254,8 @@ void Dialog::processBinaryMessage(QByteArray message)
 	if (pClient) {
 		pClient->sendBinaryMessage(message);
 	}
+}
+void Dialog::on_pushButton_clicked(bool checked)
+{
+    ui->textBrowser->clear();
 }
