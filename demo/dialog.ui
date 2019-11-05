@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>887</width>
+    <width>1252</width>
     <height>561</height>
    </rect>
   </property>
@@ -29,9 +29,9 @@
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>400</y>
-     <width>831</width>
+     <width>801</width>
      <height>121</height>
     </rect>
    </property>
@@ -39,7 +39,7 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>780</x>
+     <x>570</x>
      <y>530</y>
      <width>80</width>
      <height>15</height>
@@ -47,6 +47,890 @@
    </property>
    <property name="text">
     <string>清空</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="login">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>100</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>登录</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="autologin">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>100</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>二次登录</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="snsprivacy">
+   <property name="geometry">
+    <rect>
+     <x>1020</x>
+     <y>100</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>朋友圈隐私</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="value1">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>20</y>
+     <width>291</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>wxid_y44jlfp3t5q622</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="value2">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>60</y>
+     <width>291</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>/sdcard/Download/ic_launcher.png</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="searchcontact">
+   <property name="geometry">
+    <rect>
+     <x>1090</x>
+     <y>100</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>搜索</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="verifycontact">
+   <property name="geometry">
+    <rect>
+     <x>1170</x>
+     <y>100</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>添加</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sendtext">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>140</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>发消息</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sendpic">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>140</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>发图片</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sendvoice">
+   <property name="geometry">
+    <rect>
+     <x>1020</x>
+     <y>140</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>发送声音</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getmfriend">
+   <property name="geometry">
+    <rect>
+     <x>1100</x>
+     <y>140</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取上传好友</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="uploadmfriend">
+   <property name="geometry">
+    <rect>
+     <x>1170</x>
+     <y>140</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>上传号码</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getcontact">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>170</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取好友信息</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getqrcode">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>170</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取二维码</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getimage">
+   <property name="geometry">
+    <rect>
+     <x>1020</x>
+     <y>170</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取图片</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getvoice">
+   <property name="geometry">
+    <rect>
+     <x>1100</x>
+     <y>170</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取声音</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sendapp">
+   <property name="geometry">
+    <rect>
+     <x>1170</x>
+     <y>170</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>发送App消息</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="uploadhead">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>200</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>上传头像</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="snsupload">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>200</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>上传朋友圈</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sendsns">
+   <property name="geometry">
+    <rect>
+     <x>1020</x>
+     <y>200</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>发送朋友圈</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getsnstimeline">
+   <property name="geometry">
+    <rect>
+     <x>1100</x>
+     <y>200</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取朋友圈</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="snscomment">
+   <property name="geometry">
+    <rect>
+     <x>1180</x>
+     <y>200</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>朋友圈评论</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="usersnstimeline">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>230</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>好友朋友圈</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getprofile">
+   <property name="geometry">
+    <rect>
+     <x>950</x>
+     <y>230</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>自身信息</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="createchatroom">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>230</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>创建聊天室</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="addchatmember">
+   <property name="geometry">
+    <rect>
+     <x>1100</x>
+     <y>230</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>添加群成员</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="invitechatmember">
+   <property name="geometry">
+    <rect>
+     <x>1180</x>
+     <y>230</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>邀请群成员</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="delchatmember">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>260</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>删除群成员</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="approveaddmember">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>260</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>同意邀请群成员</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="transferchatroom">
+   <property name="geometry">
+    <rect>
+     <x>1050</x>
+     <y>260</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>转让群</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="chatroomanoment">
+   <property name="geometry">
+    <rect>
+     <x>1110</x>
+     <y>260</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>群公告</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="setweichatnumber">
+   <property name="geometry">
+    <rect>
+     <x>1170</x>
+     <y>260</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>设置微信号</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="delcontact">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>290</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>删除联系人</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modprop">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>290</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改联系人属性</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modmarkphone">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>290</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改备注手机号</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modroomname">
+   <property name="geometry">
+    <rect>
+     <x>1120</x>
+     <y>290</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改群名称</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="validroom">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>320</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>群开启验证</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="leaveroom">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>320</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>离开群</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="haspasswd">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>320</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>查询是否有密码</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="checkpasswdd">
+   <property name="geometry">
+    <rect>
+     <x>1120</x>
+     <y>320</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>校验密码</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="setpasswd">
+   <property name="geometry">
+    <rect>
+     <x>1180</x>
+     <y>320</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>设置密码</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modnickname">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>350</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改昵称</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modsignature">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>350</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改签名</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getlabel">
+   <property name="geometry">
+    <rect>
+     <x>1010</x>
+     <y>350</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取标签</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="updatelabel">
+   <property name="geometry">
+    <rect>
+     <x>1080</x>
+     <y>350</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>更新标签</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="dellabel">
+   <property name="geometry">
+    <rect>
+     <x>1160</x>
+     <y>350</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>删除标签</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="addlabel">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>380</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>添加标签</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modcontactlabel">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>380</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改联系人标签</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sendcdnvideo">
+   <property name="geometry">
+    <rect>
+     <x>1030</x>
+     <y>380</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>发送CDN视频</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modroommemnickname">
+   <property name="geometry">
+    <rect>
+     <x>1130</x>
+     <y>380</y>
+     <width>81</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改群成员昵称</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="masssendtext">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>410</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>群发文本</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="snsprivate">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>410</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>朋友圈权限</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ForbidenSnsEd">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>410</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>不让他看我的</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ForbidenSns">
+   <property name="geometry">
+    <rect>
+     <x>1080</x>
+     <y>410</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>不看他的</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="timelineopt">
+   <property name="geometry">
+    <rect>
+     <x>1150</x>
+     <y>410</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>朋友圈操作</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="scanqrcodelogin">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>440</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>扫码换登</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="bindmobile">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>440</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>绑定手机号1</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="verifymobile">
+   <property name="geometry">
+    <rect>
+     <x>1000</x>
+     <y>440</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>绑定手机号2</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getsafedevice">
+   <property name="geometry">
+    <rect>
+     <x>1080</x>
+     <y>440</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取安全设备</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="delsafedevice">
+   <property name="geometry">
+    <rect>
+     <x>1160</x>
+     <y>440</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>删除安全设备</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getvideo">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>470</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取视频</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="batchgethead">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>470</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>批量获取头像</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="revokemsg">
+   <property name="geometry">
+    <rect>
+     <x>1010</x>
+     <y>470</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>撤回消息</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getemoillist">
+   <property name="geometry">
+    <rect>
+     <x>1090</x>
+     <y>470</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取表情列表</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getemodetail">
+   <property name="geometry">
+    <rect>
+     <x>1160</x>
+     <y>470</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取表情详情</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sendemoji">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>500</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>发送表情</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="addmetype">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>500</y>
+     <width>61</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>添加我的方式</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="getpoi">
+   <property name="geometry">
+    <rect>
+     <x>1010</x>
+     <y>500</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>获取POI(发送位置)</string>
    </property>
   </widget>
  </widget>
