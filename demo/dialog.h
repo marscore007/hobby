@@ -170,11 +170,18 @@ private slots:
 
     void on_getpoi_clicked(bool checked);
 
+    void on_logout_clicked(bool checked);
+
+    void on_snslbs_clicked(bool checked);
+
+    void on_modifymore_clicked(bool checked);
+
 private:
 	void HandleLogin(QWebSocket *pClient, const QJsonObject& json_root);
 	void HandleInit(QWebSocket *pClient, const QJsonObject& json_root);
 	void HandleSync(QWebSocket *pClient, const QJsonObject& json_root);
 	void HandleResult(QWebSocket *pClient, const QJsonObject& json_root);
+	void HandleNetConnection(QWebSocket *pClient, const QJsonObject& json_root);
 	void SendCommand(QWebSocket *pClient, const QString &command);
 	void SendCommand(QWebSocket *pClient, const QJsonObject &command);
 

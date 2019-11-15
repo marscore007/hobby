@@ -12,11 +12,51 @@ const int MSG_TYPE_SYNC = 2;
 const int MSG_TYPE_RESULT = 3;
 const int MSG_TYPE_COMMAND = 4;
 const int MSG_TYPE_Auth = 5;
+const int MSG_TYPE_NetStatus = 6;
+const int MSG_TYPE_Logout = 7;
 
+
+const int CLIENT_VERSION = 654312256;
+int uin = 123456;
+std::string strSyncKey = "1234567890";
+typedef unsigned char byte;
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
+	int length = (((uin >> 13) & 524287) | (strSyncKey.length() << 19)) ^ 1442968193;
+	int length2 = 1442968193 ^ (((strSyncKey.length() >> 13) & 524287) | (uin << 19));
+	int bArrLen = strSyncKey.length() + 32;
+	byte* bArr = new byte[bArrLen];
+	memset(bArr, 0, bArrLen);
+	bArr[0] = (byte)((length >> 24) & 255);
+	bArr[1] = (byte)((length >> 16) & 255);
+	bArr[2] = (byte)((length >> 8) & 255);
+	bArr[3] = (byte)(length & 255);
+	bArr[4] = (byte)((length2 >> 24) & 255);
+	bArr[5] = (byte)((length2 >> 16) & 255);
+	bArr[6] = (byte)((length2 >> 8) & 255);
+	bArr[7] = (byte)(length2 & 255);
+	memcpy(bArr + 8, strSyncKey.c_str(), strSyncKey.length());
+	bArr[bArrLen - 24] = (byte)((CLIENT_VERSION >> 24) & 255);
+	bArr[bArrLen - 23] = (byte)((CLIENT_VERSION >> 16) & 255);
+	bArr[bArrLen - 22] = (byte)((CLIENT_VERSION >> 8) & 255);
+	bArr[bArrLen - 21] = (byte)(CLIENT_VERSION & 255);
+	memcpy(bArr + bArrLen - 20, "zh_CN", 5);
+	bArr[bArrLen - 12] = 0;
+	bArr[bArrLen - 11] = 0;
+	bArr[bArrLen - 10] = 0;
+	bArr[bArrLen - 9] = 2;
+	bArr[bArrLen - 8] = (byte)((1 >> 24) & 255);
+	bArr[bArrLen - 7] = (byte)((1 >> 16) & 255);
+	bArr[bArrLen - 6] = (byte)((1 >> 8) & 255);
+	bArr[bArrLen - 5] = (byte)(1 & 255);
+	bArr[bArrLen - 4] = (byte)((1 >> 24) & 255);
+	bArr[bArrLen - 3] = (byte)((1 >> 16) & 255);
+	bArr[bArrLen - 2] = (byte)((1 >> 8) & 255);
+	bArr[bArrLen - 1] = (byte)(1 & 255);
+
+
     ui->setupUi(this);
 	QStringList header;
 	header << QString::fromStdWString(L"状态") << QString::fromStdWString(L"用户名") << QString::fromStdWString(L"昵称");
@@ -121,10 +161,30 @@ void Dialog::HandleResult(QWebSocket *pClient, const QJsonObject& json_root)
 
 }
 
+void Dialog::HandleNetConnection(QWebSocket *pClient, const QJsonObject& json_root)
+{
+	/************************************************************************/
+	/* enum NetStatus {
+    kNetworkUnkown = -1,
+    kNetworkUnavailable = 0,
+    kGateWayFailed = 1,
+    kServerFailed = 2,
+    kConnecting = 3,
+    kConnected = 4,
+    kServerDown = 5
+};                                                                     */
+	/************************************************************************/
+	int status = json_root["status"].toInt();
+	int long_link_stauts = json_root["longlinkstatus"].toInt();
+}
+
 void Dialog::socketDisconnected()
 {
-	m_pGlobalSocket = nullptr;
 	QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
+	if (pClient == m_pGlobalSocket)
+	{
+		m_pGlobalSocket = nullptr;
+	}
 	if (pClient) {
 		auto it = m_clients.find(pClient);
 		if (it != m_clients.end())
@@ -221,6 +281,11 @@ void Dialog::processTextMessage(QString message)
 		HandleResult(pClient, root);
 	}
 	break;
+	case MSG_TYPE_NetStatus:
+	{
+		HandleNetConnection(pClient, root);
+	}
+	break;
 	default:
 		break;
 	}
@@ -241,15 +306,16 @@ void Dialog::on_pushButton_clicked(bool checked)
 
 void Dialog::on_login_clicked(bool checked)
 {
+	
 	QJsonObject jsonObject;
 	QJsonObject jsonBase;
 	jsonBase.insert("msgType", 0);
 	jsonObject.insert("base", jsonBase);
-	jsonObject.insert("strUserName", "17714315310");
-	jsonObject.insert("strPasswd", "dms5761");
+	jsonObject.insert("strUserName", "xxx");
+	jsonObject.insert("strPasswd", "xxx");
 	jsonObject.insert("Env", "{\n"
 		"\t\"DeviceBrand\": \"google\",\n" 
-		"\t\"DeviceGUID\": \"A19ed38c0c4e2b59\",\n" 
+		"\t\"DeviceGUID\": \"xxx\",\n" 
 		"\t\"DeviceInfo\": \"<deviceinfo><MANUFACTURER name=\\\\\\\"LGE\\\\\\\"><MODEL name=\\\\\\\"Nexus 5\\\\\\\"><VERSION_RELEASE name=\\\\\\\"9.0\\\\\\\"><VERSION_INCREMENTAL name=\\\\\\\"eng.android.20190330.165024\\\\\\\"><DISPLAY name=\\\\\\\"LMY48B\\\\\\\"></DISPLAY></VERSION_INCREMENTAL></VERSION_RELEASE></MODEL></MANUFACTURER></deviceinfo>\",\n" 
 		"\t\"DeviceName\": \"LGE-Nexus 5\",\n" 
 		"\t\"DeviceType\": \"android-28\",\n" 
@@ -333,7 +399,7 @@ void Dialog::on_verifycontact_clicked(bool checked)
 	jsonObject.insert("strIntroduce", "xiexie");
 	jsonObject.insert("strChatroom", "");
 	jsonObject.insert("iOpCode", 2);
-	jsonObject.insert("iScene", 3);
+	jsonObject.insert("iScene", 15);
 	jsonObject.insert("iFriendFlag", 0);// 1：不看我的朋友圈
 	SendCommand(m_pGlobalSocket, jsonObject);
 }
@@ -346,7 +412,7 @@ void Dialog::on_sendtext_clicked(bool checked)
 	jsonObject.insert("base", jsonBase);
 	jsonObject.insert("strUserName", ui->value1->text());
 	jsonObject.insert("strContent", ui->value2->text());
-	jsonObject.insert("strAt", "xxx");
+	jsonObject.insert("strAt", "XXX");
 	jsonObject.insert("iType", 1);
 	SendCommand(m_pGlobalSocket, jsonObject);
 }
@@ -444,10 +510,10 @@ void Dialog::on_getimage_clicked(bool checked)
 	jsonBase.insert("msgType", 17);
 	jsonObject.insert("base", jsonBase);
 
-	jsonObject.insert("strFromUserName", "xxx@chatroom");
-	jsonObject.insert("strToUserName", "xxx");
+	jsonObject.insert("strFromUserName", "XXX@chatroom");
+	jsonObject.insert("strToUserName", "XXX");
 	jsonObject.insert("iFileTotalLen", 56847);
-	jsonObject.insert("SvrID", "xxx");
+	jsonObject.insert("SvrID", "XXX");
 	jsonObject.insert("iCompress", 0);
 	jsonObject.insert("strPath", "/sdcard/abc.jpg");
 	SendCommand(m_pGlobalSocket, jsonObject);
@@ -459,8 +525,8 @@ void Dialog::on_getvoice_clicked(bool checked)
 	QJsonObject jsonBase;
 	jsonObject.insert("msgType", 18);
 	jsonObject.insert("base", jsonBase);
-	jsonObject.insert("iMsgId", "xxx");
-	jsonObject.insert("strClientMsgId", "xxx@xxx");
+	jsonObject.insert("iMsgId", "xx");
+	jsonObject.insert("strClientMsgId", "xx@xxx");
 	jsonObject.insert("strPath", "/sdcard/abc.amr");
 	jsonObject.insert("iTotalLen", 5688);
 	SendCommand(m_pGlobalSocket, jsonObject);
@@ -474,7 +540,7 @@ void Dialog::on_sendapp_clicked(bool checked)
 	jsonObject.insert("base", jsonBase);
 
 	jsonObject.insert("strToUserName", ui->value1->text());
-	jsonObject.insert("strXMLContent", "<appmsg appid=\"xxx\" sdkver=\"0\">\n\t\t<title>水枪玩具夏天儿童沙滩电动强力喷水枪玩具背包男女孩宝宝漂流戏水洗澡玩具 电动水枪</title>\n\t\t<des>我在京东发现了一个不错的商品，赶快来看看吧。</des>\n\t\t<action />\n\t\t<type>5</type>\n\t\t<showtype>0</showtype>\n\t\t<soundtype>0</soundtype>\n\t\t<mediatagname />\n\t\t<messageext />\n\t\t<messageaction />\n\t\t<content />\n\t\t<contentattr>0</contentattr>\n\t\t<url>https://item.m.jd.com/product/43176489417.html?wxa_abtest=o&amp;utm_source=iosapp&amp;utm_medium=appshare&amp;utm_campaign=t_335139774&amp;utm_term=Wxfriends&amp;ad_od=share</url>\n\t\t<lowurl />\n\t\t<dataurl />\n\t\t<lowdataurl />\n\t\t<appattach>\n\t\t\t<totallen>0</totallen>\n\t\t\t<attachid />\n\t\t\t<emoticonmd5 />\n\t\t\t<fileext />\n\t\t\t<cdnthumburl>3056020100044f304d0201000204239dd1b402033d14bb020490105e6402045d3c07070428777875706c6f61645f777869645f79793965746f7736617068323232365f313536343231353034370204010800030201000400</cdnthumburl>\n\t\t\t<cdnthumbmd5>9ffec2d5417696a21eed157517cb3991</cdnthumbmd5>\n\t\t\t<cdnthumblength>5536</cdnthumblength>\n\t\t\t<cdnthumbwidth>120</cdnthumbwidth>\n\t\t\t<cdnthumbheight>120</cdnthumbheight>\n\t\t\t<cdnthumbaeskey>40441c1f42fd44e2c96db4bc27e48524</cdnthumbaeskey>\n\t\t\t<aeskey>40441c1f42fd44e2c96db4bc27e48524</aeskey>\n\t\t\t<encryver>0</encryver>\n\t\t\t<filekey>xxx_yy9etow6aph2226_1564215047</filekey>\n\t\t</appattach>\n\t\t<extinfo />\n\t\t<sourceusername />\n\t\t<sourcedisplayname />\n\t\t<thumburl />\n\t\t<md5 />\n\t\t<statextstr>GhQKEnd4ZTc1YTJlNjg4NzczMTVmYg==</statextstr>\n\t</appmsg>");
+	jsonObject.insert("strXMLContent", "<appmsg appid=\"wxe75a2e68877315fb\" sdkver=\"0\">\n\t\t<title>水枪玩具夏天儿童沙滩电动强力喷水枪玩具背包男女孩宝宝漂流戏水洗澡玩具 电动水枪</title>\n\t\t<des>我在京东发现了一个不错的商品，赶快来看看吧。</des>\n\t\t<action />\n\t\t<type>5</type>\n\t\t<showtype>0</showtype>\n\t\t<soundtype>0</soundtype>\n\t\t<mediatagname />\n\t\t<messageext />\n\t\t<messageaction />\n\t\t<content />\n\t\t<contentattr>0</contentattr>\n\t\t<url>https://item.m.jd.com/product/43176489417.html?wxa_abtest=o&amp;utm_source=iosapp&amp;utm_medium=appshare&amp;utm_campaign=t_335139774&amp;utm_term=Wxfriends&amp;ad_od=share</url>\n\t\t<lowurl />\n\t\t<dataurl />\n\t\t<lowdataurl />\n\t\t<appattach>\n\t\t\t<totallen>0</totallen>\n\t\t\t<attachid />\n\t\t\t<emoticonmd5 />\n\t\t\t<fileext />\n\t\t\t<cdnthumburl>3056020100044f304d0201000204239dd1b402033d14bb020490105e6402045d3c07070428777875706c6f61645f777869645f79793965746f7736617068323232365f313536343231353034370204010800030201000400</cdnthumburl>\n\t\t\t<cdnthumbmd5>9ffec2d5417696a21eed157517cb3991</cdnthumbmd5>\n\t\t\t<cdnthumblength>5536</cdnthumblength>\n\t\t\t<cdnthumbwidth>120</cdnthumbwidth>\n\t\t\t<cdnthumbheight>120</cdnthumbheight>\n\t\t\t<cdnthumbaeskey>40441c1f42fd44e2c96db4bc27e48524</cdnthumbaeskey>\n\t\t\t<aeskey>40441c1f42fd44e2c96db4bc27e48524</aeskey>\n\t\t\t<encryver>0</encryver>\n\t\t\t<filekey>XXX_yy9etow6aph2226_1564215047</filekey>\n\t\t</appattach>\n\t\t<extinfo />\n\t\t<sourceusername />\n\t\t<sourcedisplayname />\n\t\t<thumburl />\n\t\t<md5 />\n\t\t<statextstr>GhQKEnd4ZTc1YTJlNjg4NzczMTVmYg==</statextstr>\n\t</appmsg>");
 	jsonObject.insert("iType", 5);
 	SendCommand(m_pGlobalSocket, jsonObject);
 }
@@ -508,8 +574,8 @@ void Dialog::on_sendsns_clicked(bool checked)
 	jsonBase.insert("msgType", 23);
 	jsonObject.insert("base", jsonBase);
 
-	jsonObject.insert("strContent", "xxxxxx");
-	jsonObject.insert("iType", 0); //0图片 1视频  2 改变朋友圈背景
+	jsonObject.insert("strContent", "xxx");
+	jsonObject.insert("iType", 3); //0图片 1视频  2 改变朋友圈背景 3 文本
 
 	QJsonArray params  ;
 	QJsonObject p1  ;
@@ -517,11 +583,11 @@ void Dialog::on_sendsns_clicked(bool checked)
 	p1.insert("iImgSize", 0);
 	p1.insert("iImgWidth", 224);
 	p1.insert("iImgHeight", 391);
-	p1.insert("strImgUrl", "http://mmsns.qpic.xxx5gagRibLgTVr/0");
-	p1.insert("strThumbnailURL", "http://mmsns.qpic.cn/mxxxppSuDI7ib5gagRibLgTVr/150");
+	p1.insert("strImgUrl", "http://mmsns.qpic.cn/mmsns/PiajxSqBRaEL5Qv8uaO6xotqpJfrSpApDcPGicHibwAOR70HppSuDI7ib5gagRibLgTVr/0");
+	p1.insert("strThumbnailURL", "http://mmsns.qpic.cn/mmsns/PiajxSqBRaEL5Qv8uaO6xotqpJfrSpApDcPGicHibwAOR70HppSuDI7ib5gagRibLgTVr/150");
 	params.append(p1);
 
-	jsonObject.insert("params", params);
+	//jsonObject.insert("params", params);
 
 	//whitelist
 	QJsonArray whiteList;
@@ -706,6 +772,7 @@ void Dialog::on_modprop_clicked(bool checked)
 	jsonObject.insert("strUserName", ui->value1->text());
 	jsonObject.insert("strChatroom", "");
 	jsonObject.insert("iProp", ui->value2->text().toInt());
+	jsonObject.insert("strMark", "XXXXA");
 	SendCommand(m_pGlobalSocket, jsonObject);
 }
 
@@ -869,8 +936,8 @@ void Dialog::on_sendcdnvideo_clicked(bool checked)
 	jsonBase.insert("msgType", 65);
 	jsonObject.insert("base", jsonBase);
 	jsonObject.insert("strUserName", ui->value1->text());
-	jsonObject.insert("strAESKey", "xxx");
-	jsonObject.insert("strCDNVideoUrl", "306b02010004643062020xxxx833cb702045d3be293043d61757076696465xxxx23435646435625f313536xx00");
+	jsonObject.insert("strAESKey", "df1c526cdb04f49370af554b63d0653a");
+	jsonObject.insert("strCDNVideoUrl", "306b020100046430620201000204f2473b7802032f802902045a833cb702045d3be293043d617570766964656f5f346162666539353030323435646435625f313536343230353731335f3133333530353237303731396634623462643435393933390204010800040201000400");
 	jsonObject.insert("iThumbTotalLen", 31814);
 	jsonObject.insert("iVideoLen", 214586);
 	jsonObject.insert("iPlayLen", 1);
@@ -1094,5 +1161,51 @@ void Dialog::on_getpoi_clicked(bool checked)
 	jsonObject.insert("base", jsonBase);
 	jsonObject.insert("dLatitude", 141.1111111);
 	jsonObject.insert("dLongitude", 32.22222222);
+	SendCommand(m_pGlobalSocket, jsonObject);
+}
+
+void Dialog::on_logout_clicked(bool checked)
+{
+	if (nullptr == m_pGlobalSocket)
+	{
+		return;
+	}
+	QJsonObject base;
+	base.insert("id", 0);
+	base.insert("type", MSG_TYPE_Logout);
+	base.insert("errorcode", 0);
+
+	QJsonObject command;
+	command.insert("base", base);
+
+	QJsonDocument document;
+	document.setObject(command);
+	QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+	m_pGlobalSocket->sendTextMessage(QString(byteArray));
+}
+
+void Dialog::on_snslbs_clicked(bool checked)
+{
+	QJsonObject jsonObject;
+	QJsonObject jsonBase;
+	jsonBase.insert("msgType", 46);
+	jsonObject.insert("base", jsonBase);
+	jsonObject.insert("iType", 1);//1 查找2删除3查找gg 4查找mm
+	jsonObject.insert("dLatitude", 22.546053);
+	jsonObject.insert("dLongitude", 114.02597);
+	SendCommand(m_pGlobalSocket, jsonObject);
+}
+
+void Dialog::on_modifymore_clicked(bool checked)
+{
+	QJsonObject jsonObject;
+	QJsonObject jsonBase;
+	jsonBase.insert("msgType", 72);
+	jsonObject.insert("base", jsonBase);
+	jsonObject.insert("strProvince", "GX");
+	jsonObject.insert("strCity", "GL");
+	jsonObject.insert("strSignature", "GLXXX");
+	jsonObject.insert("strCountry", "CN");
+	jsonObject.insert("iSex", 2);
 	SendCommand(m_pGlobalSocket, jsonObject);
 }
